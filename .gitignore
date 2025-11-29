@@ -215,3 +215,5 @@ CLAUDE.md
 # Streamlit
 .streamlit/secrets.toml
 planning/
+.env.development
+.env.production

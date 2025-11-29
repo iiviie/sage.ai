@@ -1,6 +1,9 @@
 version: '3.8'
 
 services:
+  # ============================================================================
+  # LOCAL POSTGRESQL DATABASE
+  # ============================================================================
   postgres:
     image: postgres:15-alpine
     container_name: sage_postgres
@@ -17,26 +20,13 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - sage_network
 
-  auth_service:
-    build:
-      context: ./auth_service
-      dockerfile: Dockerfile
-    container_name: sage_auth_service
-    ports:
-      - "8000:8000"
-    environment:
-      DATABASE_URL: postgresql://sage_user:sage_password@postgres:5432/sage_auth_db
-      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
-      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
-      SECRET_KEY: ${SECRET_KEY:-your-secret-key-change-in-production}
-      ENVIRONMENT: development
-    depends_on:
-      postgres:
-        condition: service_healthy
-    volumes:
-      - ./auth_service:/app
-    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+networks:
+  sage_network:
+    driver: bridge
 
 volumes:
   postgres_data:
+  localstack_data:
