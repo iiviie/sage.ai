@@ -1,3 +1,1 @@
-"""
-API endpoints module
-"""
+"""API module"""

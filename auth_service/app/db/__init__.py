@@ -1,3 +1,4 @@
-from .database import Base, engine, get_db, init_db, SessionLocal
+"""Database module exports"""
+from .database import get_db, init_db, Base, engine, SessionLocal
 
-__all__ = ["Base", "engine", "get_db", "init_db", "SessionLocal"]
+__all__ = ["get_db", "init_db", "Base", "engine", "SessionLocal"]

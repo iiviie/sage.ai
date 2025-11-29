@@ -1,3 +1,4 @@
-from .user import User
+"""Models module exports"""
+from .test_item import TestItem
 
-__all__ = ["User"]
+__all__ = ["TestItem"]

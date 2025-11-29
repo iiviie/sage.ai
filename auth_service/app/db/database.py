@@ -1,26 +1,28 @@
+"""
+Database connection and session management.
+"""
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, declarative_base
 from app.core.config import settings
 
-# Create SQLAlchemy engine
+# Create database engine
 engine = create_engine(
     settings.DATABASE_URL,
     pool_pre_ping=True,  # Verify connections before using them
     echo=settings.DEBUG,  # Log SQL queries in debug mode
 )
 
-# Create SessionLocal class for database sessions
+# Create session factory
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-# Base class for all database models
+# Create base class for models
 Base = declarative_base()
 
 
 def get_db():
     """
-    Dependency function to get database session.
-    Yields a database session and ensures it's closed after use.
+    Dependency function for FastAPI to get database sessions.
+    Yields a session and ensures it's closed after use.
     """
     db = SessionLocal()
     try:
@@ -31,8 +33,11 @@ def get_db():
 
 def init_db():
     """
-    Initialize database tables.
-    Creates all tables defined in models.
+    Initialize database by creating all tables.
+    Called during application startup.
     """
-    from app.models import user  # Import all models here
+    # Import all models here so they're registered with Base
+    from app.models import test_item  # noqa
+
+    # Create all tables
     Base.metadata.create_all(bind=engine)
